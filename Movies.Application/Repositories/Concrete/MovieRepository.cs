@@ -16,7 +16,7 @@ public class MovieRepository : IMovieRepository
 
     public Task<Movie?> GetByIdAsync(Guid id)
     {
-        var movie = _movies.FirstOrDefault(x => x.Id == id);
+        var movie = _movies.SingleOrDefault(x => x.Id == id);
         return Task.FromResult(movie);
     }
 
@@ -46,7 +46,7 @@ public class MovieRepository : IMovieRepository
     #endregion
 
     #region Delete
-    public Task<bool> DeleteAsync(Guid id)
+    public Task<bool> DeleteByIdAsync(Guid id)
     {
         var removedCount = _movies.RemoveAll(x => x.Id == id);
         return Task.FromResult(removedCount > 0);
