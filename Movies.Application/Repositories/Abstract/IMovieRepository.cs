@@ -9,4 +9,5 @@ public interface IMovieRepository
     Task<bool> CreateMovieAsync(Movie movie);
     Task<bool> UpdateAsync(Movie movie);
     Task<bool> DeleteByIdAsync(Guid id);
+    Task<bool> ExistsByIdAsync(Guid id);
 }

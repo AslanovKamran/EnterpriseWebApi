@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplication();
-
+builder.Services.AddDatabase(builder.Configuration.GetConnectionString("MoviesDb")!);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
