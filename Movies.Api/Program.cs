@@ -1,3 +1,4 @@
+using Movies.Api.Mapping;
 using Movies.Application.ServiceColletctionExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
+app.UseMiddleware<ValidationMappingMiddleware>();
 app.MapControllers();
 
 app.Run();

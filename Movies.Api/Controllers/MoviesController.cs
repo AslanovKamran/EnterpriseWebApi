@@ -15,7 +15,13 @@ public class MoviesController : ControllerBase
     private readonly IMovieService _movieService;
 
     public MoviesController(IMovieService movieService)
-    => movieService = _movieService;
+    {
+        _movieService = movieService;
+    }
+   
+
+
+
 
     #region Get
 
