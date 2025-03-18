@@ -14,30 +14,23 @@ public class MoviesController : ControllerBase
 {
     private readonly IMovieService _movieService;
 
-    public MoviesController(IMovieService movieService)
-    {
-        _movieService = movieService;
-    }
-   
-
-
-
+    public MoviesController(IMovieService movieService) => _movieService = movieService;
 
     #region Get
 
     [HttpGet]
     [Route(ApiEndPoints.Movies.GetAll)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var movies = await _movieService.GetAllAsync();
+        var movies = await _movieService.GetAllAsync(cancellationToken);
         return Ok(movies.MapMoviesToMoviesResponse());
     }
 
     [HttpGet]
     [Route(ApiEndPoints.Movies.Get)]
-    public async Task<IActionResult> Get([FromRoute] Guid id)
+    public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var movie = await _movieService.GetByIdAsync(id);
+        var movie = await _movieService.GetByIdAsync(id, cancellationToken);
         if (movie is null) return NotFound();
         return Ok(movie.MapMovieToResponse());
     }
@@ -48,12 +41,12 @@ public class MoviesController : ControllerBase
 
     [HttpPost]
     [Route(ApiEndPoints.Movies.Create)]
-    public async Task<IActionResult> Create([FromBody] CreateMovieRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateMovieRequest request, CancellationToken cancellationToken)
     {
         //Accept Contract
         var movie = request.MapRequestToMovie();
 
-        var result = await _movieService.CreateMovieAsync(movie);
+        var result = await _movieService.CreateMovieAsync(movie, cancellationToken);
 
         //Return contract
         var movieResponse = movie.MapMovieToResponse();
@@ -70,10 +63,10 @@ public class MoviesController : ControllerBase
     [HttpPut]
     [Route(ApiEndPoints.Movies.Update)]
     public async Task<IActionResult> Update([FromRoute] Guid id,
-        [FromBody] UpdateMovieRequest request)
+        [FromBody] UpdateMovieRequest request, CancellationToken cancellationToken)
     {
         var movie = request.MapRequestToMovie(id);
-        var result = await _movieService.UpdateAsync(movie);
+        var result = await _movieService.UpdateAsync(movie, cancellationToken);
         if (result is null) return NotFound();
         var response = movie.MapMovieToResponse();
         return Ok(response);
@@ -85,9 +78,9 @@ public class MoviesController : ControllerBase
 
     [HttpDelete]
     [Route(ApiEndPoints.Movies.Delete)]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var result = await _movieService.DeleteByIdAsync(id);
+        var result = await _movieService.DeleteByIdAsync(id, cancellationToken);
         if (!result) return NotFound();
         return NoContent();
     }
